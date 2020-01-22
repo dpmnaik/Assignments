@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Team {
     private final String TeamName;
     private ArrayList<Player> teamPlayers;
+    private ArrayList<Bowler> teamBowlers;
     private int teamScore;
     private int teamWickets;
     private String oversPlayed;
@@ -15,6 +16,7 @@ public class Team {
         teamWickets=0;
         teamScore=0;
         teamPlayers= new ArrayList<>();
+        teamBowlers= new ArrayList<>();
     }
 
     public void updateOvers(String op)
@@ -48,11 +50,30 @@ public class Team {
         teamPlayers.add(player);
     }
 
-    public String getTname() {
+    public void addBowler(Bowler bowler)
+    {
+        teamBowlers.add(bowler);
+    }
+
+
+    public String getTeamName() {
         return TeamName;
+    }
+
+    public ArrayList<Player> getTeamPlayers() {
+        return teamPlayers;
+    }
+
+    public ArrayList<Bowler> getTeamBowlers() {
+        return teamBowlers;
     }
 
     public Player getPlayer(int i) {
         return teamPlayers.get(i);
+    }
+
+    public Bowler getBowler(int i)
+    {
+        return teamBowlers.get(i);
     }
 }

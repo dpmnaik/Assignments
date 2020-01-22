@@ -12,31 +12,38 @@ public class Match {
         team2=new Team("Team B");
     }
 
-    //Adding Players to Teams
-    /*
-    public void createTeams()
+
+    private void createTeams()
     {
-        for(int i=0;i<11;i++)
+        for(int i=0;i<6;i++)
         {
             team1.addPlayer(new Player("PA"+(i+1)));
             team2.addPlayer(new Player("PB"+(i+1)));
         }
+        for(int i=0;i<5;i++)
+        {
+            team1.addPlayer(new Player("PA"+(i+7)));
+            team1.addBowler(new Bowler("PA"+(i+7)));
+            team2.addPlayer(new Player("PB"+(i+7)));
+            team2.addBowler(new Bowler("PB"+(i+7)));
+        }
     }
-    */
+
 
     public void startPlaying()
     {
         CricketGame cgame=new CricketGame();
+        createTeams();
         cgame.doToss();
         int []res;
         if(cgame.getTossResult()==0)
         {
             matchTossResult="Team A batting first";
-            res=cgame.playInning(true);
+            res=cgame.playInning(true,team1,team2);
             team1.updateTeamScore(res[0]);
             team1.updateTeamWickets(res[1]);
             team1.updateOvers((res[2]/6)+"."+(res[2]%6));
-            res=cgame.playInning(false);
+            res=cgame.playInning(false,team2,team1);
             team2.updateTeamScore(res[0]);
             team2.updateTeamWickets(res[1]);
             team2.updateOvers((res[2]/6)+"."+(res[2]%6));
@@ -44,11 +51,11 @@ public class Match {
         else
         {
             matchTossResult="Team B batting first";
-            res=cgame.playInning(true);
+            res=cgame.playInning(true,team2,team1);
             team2.updateTeamScore(res[0]);
             team2.updateTeamWickets(res[1]);
             team2.updateOvers((res[2]/6)+"."+(res[2]%6));
-            res=cgame.playInning(false);
+            res=cgame.playInning(false,team1,team2);
             team1.updateTeamScore(res[0]);
             team1.updateTeamWickets(res[1]);
             team1.updateOvers((res[2]/6)+"."+(res[2]%6));
@@ -57,8 +64,8 @@ public class Match {
 
     public void endGame()
     {
-        if(team1.getTeamScore()>team2.getTeamScore()) Result=team1.getTname()+" beat " +team2.getTname();
-        else if(team2.getTeamScore()>team1.getTeamScore()) Result=team2.getTname()+" beat " +team1.getTname();
+        if(team1.getTeamScore()>team2.getTeamScore()) Result=team1.getTeamName()+" beat " +team2.getTeamName();
+        else if(team2.getTeamScore()>team1.getTeamScore()) Result=team2.getTeamName()+" beat " +team1.getTeamName();
         else Result="Game Tied";
     }
 
