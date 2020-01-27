@@ -1,5 +1,7 @@
 package com.Tekion.Cricket;
 
+import java.util.Arrays;
+
 public class Match {
     private String Result;
     private String matchTossResult;
@@ -15,17 +17,22 @@ public class Match {
 
     private void createTeams()
     {
-        for(int i=0;i<6;i++)
+        for(int i=0;i<3;i++)
         {
-            team1.addPlayer(new Player("PA"+(i+1)));
-            team2.addPlayer(new Player("PB"+(i+1)));
+            team1.addPlayer(new Player("PA"+(i+1),85,75,40));
+            team2.addPlayer(new Player("PB"+(i+1),85,75,40));
+        }
+        for(int i=0;i<3;i++)
+        {
+            team1.addPlayer(new Player("PA"+(i+3),60,50,85));
+            team2.addPlayer(new Player("PB"+(i+3),60,50,85));
         }
         for(int i=0;i<5;i++)
         {
-            team1.addPlayer(new Player("PA"+(i+7)));
-            team1.addBowler(new Bowler("PA"+(i+7)));
-            team2.addPlayer(new Player("PB"+(i+7)));
-            team2.addBowler(new Bowler("PB"+(i+7)));
+            team1.addPlayer(new Player("PA"+(i+7),40,60,40));
+            team1.addBowler(new Bowler("PA"+(i+7),40,60,40));
+            team2.addPlayer(new Player("PB"+(i+7),40,60,40));
+            team2.addBowler(new Bowler("PB"+(i+7),40,60,40));
         }
     }
 
@@ -38,35 +45,66 @@ public class Match {
         int []res;
         if(cgame.getTossResult()==0)
         {
-            matchTossResult="Team A batting first";
+            matchTossResult="Team A won the toss and choose to bat";
+            //playing first inning
             res=cgame.playInning(true,team1,team2);
+            System.out.println(Arrays.toString(res));
             team1.updateTeamScore(res[0]);
             team1.updateTeamWickets(res[1]);
-            team1.updateOvers((res[2]/6)+"."+(res[2]%6));
+            if(res[2]<=300)
+                team1.updateOvers((res[2]/6)+"."+(res[2]%6));
+            else
+                team1.updateOvers(res[2]/6+".0");
+
+            //playing second innings
             res=cgame.playInning(false,team2,team1);
+            System.out.println(Arrays.toString(res));
             team2.updateTeamScore(res[0]);
             team2.updateTeamWickets(res[1]);
-            team2.updateOvers((res[2]/6)+"."+(res[2]%6));
+            if(res[2]<=300)
+                team2.updateOvers((res[2]/6)+"."+(res[2]%6));
+            else
+                team2.updateOvers(res[2]/6+".0");
         }
         else
         {
-            matchTossResult="Team B batting first";
+            matchTossResult="Team B won the toss and choose to bat";
+            //first inning
             res=cgame.playInning(true,team2,team1);
+            System.out.println(Arrays.toString(res));
             team2.updateTeamScore(res[0]);
             team2.updateTeamWickets(res[1]);
-            team2.updateOvers((res[2]/6)+"."+(res[2]%6));
+            if(res[2]<=300)
+                team2.updateOvers((res[2]/6)+"."+(res[2]%6));
+            else
+                team2.updateOvers(res[2]/6+".0");
+
+            //second inning
             res=cgame.playInning(false,team1,team2);
+            System.out.println(Arrays.toString(res));
             team1.updateTeamScore(res[0]);
             team1.updateTeamWickets(res[1]);
-            team1.updateOvers((res[2]/6)+"."+(res[2]%6));
+            if(res[2]<=300)
+                team1.updateOvers((res[2]/6)+"."+(res[2]%6));
+            else
+                team1.updateOvers(res[2]/6+".0");
         }
     }
 
     public void endGame()
     {
-        if(team1.getTeamScore()>team2.getTeamScore()) Result=team1.getTeamName()+" beat " +team2.getTeamName();
-        else if(team2.getTeamScore()>team1.getTeamScore()) Result=team2.getTeamName()+" beat " +team1.getTeamName();
-        else Result="Game Tied";
+        if(matchTossResult.equals("Team A won the toss and choose to bat")){
+            if(team1.getTeamScore()>team2.getTeamScore()) Result=team1.getTeamName()+" won by "+(team1.getTeamScore()-team2.getTeamScore())+" runs";
+            else if(team2.getTeamScore()>team1.getTeamScore()) Result=team2.getTeamName()+" won by " +(10-team2.getTeamWickets())+" wickets";
+            else Result="Game Tied";
+        }
+        else
+        {
+            if(team1.getTeamScore()>team2.getTeamScore()) Result=team1.getTeamName()+" won by " +(10-team1.getTeamWickets())+" wickets";
+            else if(team2.getTeamScore()>team1.getTeamScore()) Result=team2.getTeamName()+" won by "+(team1.getTeamScore()-team2.getTeamScore())+" runs";
+            else Result="Game Tied";
+        }
+
     }
 
     public String getResult()

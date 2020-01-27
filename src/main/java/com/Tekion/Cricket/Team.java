@@ -61,7 +61,10 @@ public class Team {
     }
 
     public ArrayList<Player> getTeamPlayers() {
-        return teamPlayers;
+        ArrayList<Player> batsmen=new ArrayList<>();
+        for(Player player: teamPlayers)
+            if(player.getBallsFaced()!=0) batsmen.add(player);
+        return batsmen;
     }
 
     public ArrayList<Bowler> getTeamBowlers() {

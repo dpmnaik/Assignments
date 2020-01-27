@@ -5,6 +5,23 @@ import java.util.ArrayList;
 public class CricketGame {
     private int tossResult;
     private static int firstInningsScore=Integer.MAX_VALUE;
+    private static char []ballOutcome={'0','1','2','3','4','5','6','W'};
+//    private static int [] high={70,20,10,5,10,1,3,3};
+//    private static int [] good={60,7,5,2,18,1,7,8};
+//    private static int [] bad={80,10,5,2,4,2,2,12};
+
+    private int findCeil(int[] arr, int r, int l, int h)
+    {
+        int mid;
+        while (l < h)
+        {
+            mid = l + ((h - l) >> 1);
+            if(r > arr[mid])    l = mid + 1;
+            else h = mid;
+        }
+        return (arr[l] >= r) ? l : -1;
+    }
+
     public void doToss()
     {
         tossResult = (int)(Math.random()*2);
@@ -24,7 +41,7 @@ public class CricketGame {
         {
             Player player=currBatsmen.get(currBatsmenIndex);
             player.updateBallsFaced();
-            ch=ballResult();
+            ch=ballResult(player.getFreq());
             if(ch=='W'){
                 wickets++;
                 Bowler bowler=bowling.getBowler(currBowlerIndex);
@@ -58,12 +75,22 @@ public class CricketGame {
         return new int[]{inningScore, wickets,i};
     }
 
-    private char ballResult()
+
+    private char ballResult(int[] freq)
     {
-        int rand=(int)(Math.random()*8);
-        if(rand==7) return 'W';
-        else return (char)(rand+48); //converting random no into char
+        int[] prefix =new int[8];
+        int i;
+        prefix[0] = freq[0];
+        for (i = 1; i < 8; ++i)
+            prefix[i] = prefix[i - 1] + freq[i];
+
+        int r = (int)(Math.random() * prefix[7]);
+
+
+        int indexc = findCeil(prefix, r, 0, 7);
+        return ballOutcome[indexc];
     }
+
 
     public int getTossResult() {
         return tossResult;

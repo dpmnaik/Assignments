@@ -1,6 +1,8 @@
 package com.Tekion.Cricket;
 
+
 public class MatchResult {
+
     private final String tossResult;
     private InningScoreCard firstInning;
     private InningScoreCard secondInning;
